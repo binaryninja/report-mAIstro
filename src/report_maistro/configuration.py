@@ -4,29 +4,27 @@ from typing import Any, Optional
 
 from langchain_core.runnables import RunnableConfig
 from typing_extensions import Annotated
-from dataclasses import dataclass
 
-DEFAULT_REPORT_STRUCTURE = """The report structure should focus on breaking-down the user-provided topic:
-
-1. Introduction (no research needed)
-   - Brief overview of the topic area
-
-2. Main Body Sections:
-   - Each section should focus on a sub-topic of the user-provided topic
-   - Include any key concepts and definitions
-   - Provide real-world examples or case studies where applicable
-   
-3. Conclusion
-   - Aim for 1 structural element (either a list of table) that distills the main body sections 
-   - Provide a concise summary of the report"""
+DEFAULT_REPORT_STRUCTURE = """Red Team Campaign Report Structure:
+1. Executive Summary
+   - Brief overview of the campaign, including the campaign name, scope, and overall risk.
+2. Campaign Details
+   - Campaign Name, Description, Objectives, and Timeline.
+3. Technical Findings
+   - Detailed findings including vulnerabilities exploited, techniques used, evidence, and risk ratings.
+4. Remediation Recommendations
+   - Actionable recommendations to mitigate identified weaknesses.
+5. Conclusion
+   - Summary of findings and next steps for improving security posture.
+"""
 
 @dataclass(kw_only=True)
 class Configuration:
-    """The configurable fields for the chatbot."""
+    """Configurable fields for the red team reporting tool."""
     report_structure: str = DEFAULT_REPORT_STRUCTURE
-    number_of_queries: int = 2 
-    tavily_topic: str = "general"
-    tavily_days: str = None
+    number_of_queries: int = 2
+    tavily_topic: str = "cybersecurity"
+    tavily_days: Optional[str] = None
     planner_model: str = "o3-mini"
     writer_model: str = "claude-3-5-sonnet-latest"
 
@@ -34,7 +32,6 @@ class Configuration:
     def from_runnable_config(
         cls, config: Optional[RunnableConfig] = None
     ) -> "Configuration":
-        """Create a Configuration instance from a RunnableConfig."""
         configurable = (
             config["configurable"] if config and "configurable" in config else {}
         )
